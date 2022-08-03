@@ -26,7 +26,7 @@ service.interceptors.request.use(async (config) => {
 
   return config
 })
-// 
+// .
 service.interceptors.response.use(
   (res) => {
     const { success, data, message } = res.data
