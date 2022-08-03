@@ -1,6 +1,5 @@
 <template>
   <div :class="{ 'has-logo': showLogo }">
-    <!-- 左侧logo -->
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
@@ -29,7 +28,6 @@ import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
-
 export default {
   components: { SidebarItem, Logo },
   computed: {

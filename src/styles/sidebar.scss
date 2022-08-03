@@ -9,7 +9,7 @@
   .sidebar-container {
     transition: width 0.28s;
     width: $sideBarWidth !important;
-    background-color: $menuBg;
+    background: -webkit-linear-gradient(bottom, #3d6df8, #5b8cff);
     height: 100%;
     position: fixed;
     font-size: 0px;
@@ -27,6 +27,7 @@
 
     .scrollbar-wrapper {
       background: url('~@/assets/common/leftnavBg.png') no-repeat 0 100%;
+      overflow-x: hidden !important;
     }
 
     .el-scrollbar__bar.is-vertical {
@@ -66,7 +67,6 @@
       border: none;
       height: 100%;
       width: 100% !important;
-      background-color: transparent;
       a {
         li {
           .svg-icon {
@@ -81,7 +81,6 @@
             color: #fff;
           }
           &:hover {
-            background-color: #fff !important;
             .svg-icon {
               color: #43a7fe;
             }
@@ -118,7 +117,7 @@
 
   .hideSidebar {
     .sidebar-container {
-      background: -webkit-linear-gradient(bottom, #3d6df8, #5b8cff);
+      width: 54px !important;
     }
 
     .main-container {
