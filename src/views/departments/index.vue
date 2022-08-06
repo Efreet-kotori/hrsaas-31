@@ -15,6 +15,7 @@
           <template v-slot="{ data }">
             <TreeTools
               @add="showAddDept"
+              @edit="showEdit"
               :treeNode="data"
               @remove="loadDepts"
             />
@@ -25,6 +26,7 @@
 
     <!-- 添加部门弹层 -->
     <AddDept
+      ref="addDept"
       @addsuccess="loadDepts"
       :visible.sync="dialogVisible"
       :currentNode="currentNode"
@@ -71,6 +73,10 @@ export default {
     showAddDept(val) {
       this.dialogVisible = true
       this.currentNode = val
+    },
+    showEdit(val) {
+      this.dialogVisible = true
+      this.$refs.addDept.getDeptById(val.id)
     },
   },
 }

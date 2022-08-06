@@ -33,3 +33,17 @@ export function addDeptApi(data) {
     data,
   })
 }
+
+export function getDeptByIdApi(id) {
+  return request({
+    url: '/company/department/' + id,
+  })
+}
+
+export function editDeptsApi(data) {
+  return request({
+    url: '/company/department/' + data.id,
+    method: 'PUT',
+    data,
+  })
+}
