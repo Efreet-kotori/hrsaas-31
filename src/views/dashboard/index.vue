@@ -1,31 +1,42 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">
-      name: {{ name }}</div>
-  </div>
+  <div>shouye</div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
-  name: 'Dashboard',
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
-  }
+  data() {
+    return {
+      list: [
+        { name: '章三', id: 1, pid: 0 },
+        { name: '章三三', pid: 1, id: 2 },
+        { name: '里斯', id: 3, pid: 0 },
+        { name: '里斯斯', id: 4, pid: 3 },
+      ],
+    }
+  },
+
+  created() {
+    const tree = this.transListToTree(this.list, 0)
+    console.log(tree)
+  },
+
+  methods: {
+    transListToTree(data, pid) {
+      const arr = []
+      data.forEach((item) => {
+        if (item.pid === pid) {
+          const children = this.transListToTree(data, item.id)
+          if (children.length) {
+            item.children = children
+          }
+          arr.push(item)
+        }
+      })
+
+      return arr
+    },
+  },
 }
 </script>
 
-<style lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
-}
-</style>
+<style scoped></style>
