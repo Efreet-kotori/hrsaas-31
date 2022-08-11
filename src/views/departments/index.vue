@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-container">
+  <div v-loading="loading" class="dashboard-container">
     <div class="app-container">
       <el-card class="box-card">
         <!-- 头部 -->
@@ -54,6 +54,7 @@ export default {
       company: { name: '传智教育', manager: '负责人' },
       dialogVisible: false,
       currentNode: {},
+      loading: false,
     }
   },
   components: {
@@ -66,8 +67,10 @@ export default {
 
   methods: {
     async loadDepts() {
+      this.loading = true
       const res = await getDeptsApi()
       this.treeData = transListToTree(res.depts, '')
+      this.loading = false
       // console.log(this.treeData)
     },
     showAddDept(val) {
