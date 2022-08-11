@@ -26,9 +26,9 @@ import * as directives from '@/directives'
  */
 
 // 注册element ui
-Vue.use(ElementUI, { locale })
+// Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
-// Vue.use(ElementUI)
+Vue.use(ElementUI)
 
 // dev： development 开发
 // test 测试
