@@ -24,7 +24,8 @@ import * as directives from '@/directives'
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-
+import components from '@/components'
+Vue.use(components)
 // 注册element ui
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
