@@ -2,9 +2,9 @@
   <div class="dashboard-container">
     <div class="app-container">
       <el-card>
-        <el-tabs>
+        <el-tabs v-model="activeName">
           <!-- 放置页签 -->
-          <el-tab-pane label="角色管理">
+          <el-tab-pane label="角色管理" name="first">
             <!-- 新增角色按钮 -->
             <el-row style="height: 60px">
               <el-button
@@ -46,7 +46,7 @@
               />
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="公司信息">
+          <el-tab-pane label="公司信息" name="second">
             <el-alert
               title="对公司名称、公司地址、营业执照、公司地区的更新，将使得公司资料被重新审核，请谨慎修改"
               type="info"
@@ -55,16 +55,29 @@
             />
             <el-form label-width="120px" style="margin-top: 50px">
               <el-form-item label="公司名称">
-                <el-input disabled style="width: 400px" />
+                <el-input
+                  v-model="companydata.name"
+                  disabled
+                  style="width: 400px"
+                />
               </el-form-item>
               <el-form-item label="公司地址">
-                <el-input disabled style="width: 400px" />
+                <el-input
+                  v-model="companydata.companyAddress"
+                  disabled
+                  style="width: 400px"
+                />
               </el-form-item>
               <el-form-item label="邮箱">
-                <el-input disabled style="width: 400px" />
+                <el-input
+                  v-model="companydata.mailbox"
+                  disabled
+                  style="width: 400px"
+                />
               </el-form-item>
               <el-form-item label="备注">
                 <el-input
+                  v-model="companydata.remarks"
                   type="textarea"
                   :rows="3"
                   disabled
@@ -108,6 +121,7 @@
 
 <script>
 import { getRolesApi, addRolesApi } from '@/api/role'
+import { getcompanyApi } from '@/api/setting'
 export default {
   data() {
     return {
@@ -124,11 +138,13 @@ export default {
       addRoleFormRules: {
         name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
       },
+      companydata: {},
     }
   },
 
   created() {
     this.getRoles()
+    this.getcompany()
   },
 
   methods: {
@@ -162,6 +178,11 @@ export default {
     dialogClose() {
       this.$refs.form.resetFields()
       this.addRoleForm.description = ''
+    },
+    async getcompany() {
+      const res = await getcompanyApi(this.$store.state.user.userInfo.companyId)
+      console.log(res)
+      this.companydata = res
     },
   },
 }
