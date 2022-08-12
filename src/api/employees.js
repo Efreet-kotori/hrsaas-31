@@ -12,3 +12,18 @@ export function getEmployeesInfoApi(params) {
     params,
   })
 }
+
+export function removeEmployeesApi(id) {
+  return request({
+    url: '/sys/user/' + id,
+    method: 'DELETE',
+  })
+}
+
+export function addEmployees(data) {
+  return request({
+    url: '/sys/user',
+    method: 'POST',
+    data,
+  })
+}

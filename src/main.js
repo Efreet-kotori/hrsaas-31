@@ -25,7 +25,19 @@ import * as directives from '@/directives'
  * please remove it before going online ! ! !
  */
 import components from '@/components'
+
+import * as filters from '@/filters'
+
+for (let key in filters) {
+  Vue.filter(key, filters[key])
+}
+
 Vue.use(components)
+
+for (let key in directives) {
+  Vue.directive(key, directives[key])
+}
+
 // 注册element ui
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
@@ -36,10 +48,6 @@ Vue.use(ElementUI)
 // po
 
 Vue.config.productionTip = false
-
-for (let key in directives) {
-  Vue.directive(key, directives[key])
-}
 
 new Vue({
   el: '#app',

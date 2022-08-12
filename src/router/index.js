@@ -13,6 +13,7 @@ import permission from './modules/permission'
 import salarys from './modules/salarys'
 import setting from './modules/setting'
 import social from './modules/social'
+import importmodule from './modules/import'
 
 /**
  * constantRoutes
@@ -59,6 +60,7 @@ const asyncRoutes = [
   salarys,
   setting,
   social,
+  importmodule,
 ]
 
 const createRouter = () =>
