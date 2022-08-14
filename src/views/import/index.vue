@@ -1,12 +1,16 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <upload-excel :beforeUpload="excelSuccess" />
+      <upload-excel :beforeUpload="excelSuccess" :onSuccess="onSuccess" />
     </div>
   </div>
 </template>
 
 <script>
+import { importEmployees } from '@/api/employees'
+import employees from '@/constant/employees'
+import { formatTime } from '@/filters'
+const { mapKeyPath } = employees
 export default {
   data() {
     return {}
@@ -15,12 +19,35 @@ export default {
   created() {},
 
   methods: {
-    excelSuccess() {
-      const maxSize = true
-      if (maxSize) {
+    excelSuccess({ name }) {
+      if (!name.endsWith('xlsx')) {
+        this.$message.error('请选择xlsx文件')
         return false
       }
-      console.log('22')
+
+      return true
+    },
+    async onSuccess({ header, results }) {
+      const newArr = results.map((item) => {
+        const obj = {}
+        for (let key in mapKeyPath) {
+          if (key === '入职日期' || key === '转正日期') {
+            // excel 时间戳
+            const timestamp = item[key]
+            // 转化
+            const date = new Date((timestamp - 1) * 24 * 3600000)
+            date.setFullYear(date.getFullYear() - 70)
+            obj[mapKeyPath[key]] = formatTime(date)
+          } else {
+            obj[mapKeyPath[key]] = item[key]
+          }
+        }
+        return obj
+      })
+
+      await importEmployees(newArr)
+      this.$message.success('导入成功')
+      this.$router.go(-1)
     },
   },
 }
