@@ -4,10 +4,15 @@
       <page-tools>
         <span slot="left-tag">共166条记录</span>
         <template slot="right">
-          <el-button size="small" type="warning" @click="$router.push('/import')"
+          <el-button
+            size="small"
+            type="warning"
+            @click="$router.push('/import')"
             >导入</el-button
           >
-          <el-button size="small" type="danger">导出</el-button>
+          <el-button size="small" type="danger" @click="exportExcel"
+            >导出</el-button
+          >
           <el-button size="small" type="primary" @click="showAdd"
             >新增员工</el-button
           >
@@ -94,6 +99,7 @@
 <script>
 import { getEmployeesInfoApi, removeEmployeesApi } from '@/api/employees'
 import employees from '@/constant/employees'
+const { headers, hireType } = employees
 import AddEmployees from './components/add-employees.vue'
 export default {
   data() {
@@ -136,6 +142,37 @@ export default {
     },
     showAdd() {
       this.showAddEmployees = true
+    },
+    async exportExcel() {
+      const { export_json_to_excel } = await import('@/vendor/Export2Excel')
+      const { rows } = await getEmployeesInfoApi({
+        page: 1,
+        size: this.total,
+      })
+
+      const header = Object.keys(headers)
+      const data = rows.map((item) => {
+        return header.map((h) => {
+          if (h === '聘用形式') {
+            const findItem = hireType.find((hire) => {
+              return hire.id === item[headers[h]]
+            })
+            return findItem ? findItem.value : '未知'
+          } else {
+            return item[headers[h]]
+          }
+        })
+      })
+
+      export_json_to_excel({
+        header, //表头 必填
+        data, //具体数据 必填
+        filename: '员工', //非必填
+        autoWidth: true, //非必填
+        bookType: 'xlsx', //非必填
+        multiHeader: [['手机号', '其他信息', '', '', '', '', '部门']],
+        merges: ['A1:A2', 'B1:F1', 'G1:G2'],
+      })
     },
   },
 }
