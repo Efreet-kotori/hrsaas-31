@@ -22,7 +22,12 @@
               <el-table-column prop="description" label="描述" />
               <el-table-column label="操作" width="240">
                 <template slot-scope="">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button
+                    @click="showRightsDialog"
+                    size="small"
+                    type="success"
+                    >分配权限</el-button
+                  >
                   <el-button size="small" type="primary">编辑</el-button>
                   <el-button size="small" type="danger">删除</el-button>
                 </template>
@@ -116,12 +121,35 @@
         <el-button @click="onAddRole" type="primary">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 给角色分配权限 -->
+    <el-dialog
+      title="给角色分配权限"
+      :visible.sync="setRightsDialog"
+      width="50%"
+    >
+      <el-tree
+        default-expand-all
+        show-checkbox
+        node-key="id"
+        :data="permissions"
+        :default-checked-keys="defaultCheckKeys"
+        :props="{ label: 'name' }"
+      ></el-tree>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRightsDialog = false">取消</el-button>
+        <el-button type="primary">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getRolesApi, addRolesApi } from '@/api/role'
 import { getcompanyApi } from '@/api/setting'
+import { getPermissionList } from '@/api/permission'
+import { transListToTree } from '@/utils'
 export default {
   data() {
     return {
@@ -139,12 +167,17 @@ export default {
         name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
       },
       companydata: {},
+
+      setRightsDialog: false, // 控制分配权限弹层的显示后者隐藏
+      permissions: [],
+      defaultCheckKeys: [],
     }
   },
 
   created() {
     this.getRoles()
     this.getcompany()
+    this.getPermissions()
   },
 
   methods: {
@@ -183,6 +216,14 @@ export default {
       const res = await getcompanyApi(this.$store.state.user.userInfo.companyId)
       console.log(res)
       this.companydata = res
+    },
+    showRightsDialog() {
+      this.setRightsDialog = true
+    },
+    async getPermissions() {
+      const res = await getPermissionList()
+      const treePermission = transListToTree(res, '0')
+      this.permissions = treePermission
     },
   },
 }
