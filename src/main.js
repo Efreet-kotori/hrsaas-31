@@ -28,6 +28,9 @@ import components from '@/components'
 
 import * as filters from '@/filters'
 
+import Print from 'vue-print-nb'
+Vue.use(Print)
+
 for (let key in filters) {
   Vue.filter(key, filters[key])
 }
