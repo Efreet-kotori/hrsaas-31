@@ -14,3 +14,15 @@ export function addRolesApi(data) {
     data,
   })
 }
+export function removeRoleApi(id) {
+  return request({
+    url: '/sys/role/' + id,
+    method: 'DELETE',
+  })
+}
+
+export function getRolesInfo(id) {
+  return request({
+    url: '/sys/role/' + id,
+  })
+}

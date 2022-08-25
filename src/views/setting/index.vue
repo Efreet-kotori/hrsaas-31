@@ -21,15 +21,20 @@
               <el-table-column prop="name" label="角色名称" width="240" />
               <el-table-column prop="description" label="描述" />
               <el-table-column label="操作" width="240">
-                <template slot-scope="">
+                <template slot-scope="{ row }">
                   <el-button
-                    @click="showRightsDialog"
+                    @click="showRightsDialog(row.id)"
                     size="small"
                     type="success"
                     >分配权限</el-button
                   >
                   <el-button size="small" type="primary">编辑</el-button>
-                  <el-button size="small" type="danger">删除</el-button>
+                  <el-button
+                    @click="onRemove(row.id)"
+                    size="small"
+                    type="danger"
+                    >删除</el-button
+                  >
                 </template>
               </el-table-column>
             </el-table>
@@ -146,10 +151,16 @@
 </template>
 
 <script>
-import { getRolesApi, addRolesApi } from '@/api/role'
+import {
+  getRolesApi,
+  addRolesApi,
+  removeRoleApi,
+  getRolesInfo,
+} from '@/api/role'
 import { getcompanyApi } from '@/api/setting'
 import { getPermissionList } from '@/api/permission'
 import { transListToTree } from '@/utils'
+
 export default {
   data() {
     return {
@@ -217,8 +228,16 @@ export default {
       console.log(res)
       this.companydata = res
     },
-    showRightsDialog() {
+    async onRemove(id) {
+      await removeRoleApi(id)
+      this.$message.success('删除成功')
+      this.getRoles()
+    },
+
+    async showRightsDialog(id) {
       this.setRightsDialog = true
+      const res = await getRolesInfo(id)
+      this.defaultCheckKeys = res.permIds
     },
     async getPermissions() {
       const res = await getPermissionList()
